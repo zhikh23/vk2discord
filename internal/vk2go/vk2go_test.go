@@ -13,10 +13,14 @@ func TestGetDataFromVk(t *testing.T) {
 		t.Fatalf("error loading config: %s", err.Error())
 	}
 	
-	msg, err := vk2go.GetDataFromVk(config.AppConfig.VkToken, "its_bmstu", 5.154)
+	res, err := vk2go.GetDataFromVk(config.AppConfig.VkToken, 5.154, "its_bmstu", 5)
 	if err != nil {
 		t.Fatalf("error getting data from VK: %s", err.Error())
 	}
 	
+	msg := res.Response.Items[0].Text
+	if msg == "" {
+		t.Fatal("returned text must be not empty")
+	}
 	logrus.Info(msg)
 }

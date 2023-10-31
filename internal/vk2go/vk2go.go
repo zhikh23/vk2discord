@@ -1,6 +1,7 @@
 package vk2go
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -8,29 +9,44 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type LastPublicationsResponse struct {
+	Response struct {
+		Count int `json:"count"`
+		Items []struct {
+			Text string `json:"text"`
+		} 
+	} `json:"response"`
+}
 
-func GetDataFromVk(token, domain string, reqVersion float32) (string, error) {
+func GetDataFromVk(token string, reqVersion float32, domain string, count int) (*LastPublicationsResponse, error) {
 	logrus.Infof("Trying to get posts from VK for https://vk.com/%s", domain)
 
 	url := fmt.Sprintf(
-		"https://api.vk.com/method/wall.get?access_token=%s&v=%.3f&domain=%s",
-		token, reqVersion, domain,
+		"https://api.vk.com/method/wall.get?access_token=%s&v=%.3f&domain=%s&count=%d",
+		token, reqVersion, domain, count,
 	)
 
 	var client http.Client
-	resp, err := client.Get(url)
+	res, err := client.Get(url)
 	if err != nil {
-	    logrus.Fatal(err)
+		return nil, err
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
-	if resp.StatusCode == http.StatusOK {
- 		bodyBytes, err := io.ReadAll(resp.Body)
-    	if err != nil {
-    	    logrus.Fatal(err)
-    	}
-    	bodyString := string(bodyBytes)
-		return bodyString, nil
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf(res.Status)
 	}
-	return "", nil
+
+ 	bodyBytes, err := io.ReadAll(res.Body)
+    if err != nil {
+        logrus.Fatal(err)
+    }
+
+	var ret LastPublicationsResponse
+	if err := json.Unmarshal(bodyBytes, &ret); err != nil {
+		return nil, err
+	}
+
+	return &ret, nil
 }
