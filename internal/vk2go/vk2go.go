@@ -13,14 +13,13 @@ type LastPublicationsResponse struct {
 	Response struct {
 		Count int `json:"count"`
 		Items []struct {
+			Id   int 	`json:"id"`
 			Text string `json:"text"`
 		} 
 	} `json:"response"`
 }
 
 func GetDataFromVk(token string, reqVersion float32, domain string, count int) (*LastPublicationsResponse, error) {
-	logrus.Infof("Trying to get posts from VK for https://vk.com/%s", domain)
-
 	url := fmt.Sprintf(
 		"https://api.vk.com/method/wall.get?access_token=%s&v=%.3f&domain=%s&count=%d",
 		token, reqVersion, domain, count,

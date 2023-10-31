@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  vk2discorddb:
+    image: postgres:14.1-alpine
+    container_name: vk2discorddb
+    restart: always
+    environment:
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes: 
+      - db:/var/lib/postgresql/data
+
+volumes:
+  db:
+    driver: local
