@@ -12,6 +12,8 @@ var AppConfig Config
 
 type Config struct {
 	VkToken string
+	VkApiVer float32
+
 	Db DbConfig
 }
 
@@ -32,6 +34,15 @@ func Init(fromFile string) error {
 	vkToken := os.Getenv("VK_TOKEN")
 	if vkToken == "" {
 		return fmt.Errorf("missing required VK_TOKEN in .env file")
+	}
+
+	vkApiVerStr := os.Getenv("VK_API_VERSION")
+	if vkApiVerStr == "" {
+		return fmt.Errorf("missing required VK_API_VERSION in .env file")
+	}
+	vkApiVer, err := strconv.ParseFloat(vkApiVerStr, 32)
+	if err != nil {
+		return fmt.Errorf("error during parsing VK_API_VERSION: %s", err.Error())
 	}
 
 	host := os.Getenv("DB_HOST")
@@ -62,6 +73,7 @@ func Init(fromFile string) error {
 
 	AppConfig = Config{
 		VkToken: vkToken,
+		VkApiVer: float32(vkApiVer),
 		Db: DbConfig {
 			Host: host,
 			Port: port,
