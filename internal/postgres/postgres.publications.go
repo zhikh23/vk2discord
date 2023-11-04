@@ -1,4 +1,4 @@
-package db
+package postgres
 
 import (
 	"context"
@@ -6,8 +6,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func IsPublished(domain string, id int) (bool, error) {
-	conn, err := NewConn()
+func (db *Db) IsPublished(pubId int, domain string) (bool, error) {
+	conn, err := db.NewConn()
 	if err != nil {
 		return false, err
 	}
@@ -15,7 +15,7 @@ func IsPublished(domain string, id int) (bool, error) {
 
 	row := conn.QueryRow(context.Background(),
 		"SELECT 1 FROM publications WHERE domain=$1 AND id=$2",
-		domain, id)
+		domain, pubId)
 	var publicated int
 	if err = row.Scan(&publicated); err != nil {
 		return false, nil
@@ -23,8 +23,8 @@ func IsPublished(domain string, id int) (bool, error) {
 	return true, nil
 }
 
-func MarkAsPublished(domain string, id int) error {
-	conn, err := NewConn()
+func (db *Db) MarkAsPublished(pubId int, domain string) error {
+	conn, err := db.NewConn()
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func MarkAsPublished(domain string, id int) error {
 
 	ct, err := conn.Exec(context.Background(),
 		"INSERT INTO publications (domain, id) VALUES ($1, $2)",
-		domain, id)
+		domain, pubId)
 	if err != nil {
 		return err
 	}

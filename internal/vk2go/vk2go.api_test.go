@@ -1,9 +1,8 @@
-package vk2go_test
+package vk2go
 
 import (
 	"testing"
 	"vk2discord/internal/config"
-	"vk2discord/internal/vk2go"
 
 	"github.com/sirupsen/logrus"
 )
@@ -13,7 +12,7 @@ func TestGetDataFromVk(t *testing.T) {
 		t.Fatalf("error loading config: %s", err.Error())
 	}
 	
-	res, err := vk2go.GetDataFromVk(config.AppConfig.VkToken, 5.154, "its_bmstu", 5)
+	res, err := fetchDataFromVk("its_bmstu", 5, config.AppConfig.VkToken, config.AppConfig.VkApiVer)
 	if err != nil {
 		t.Fatalf("error getting data from VK: %s", err.Error())
 	}
