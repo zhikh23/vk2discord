@@ -8,11 +8,12 @@ import (
 )
 
 func TestGetDataFromVk(t *testing.T) {
-	if err := config.Init("../../.env"); err != nil {
+	cfg, err := config.Init("../../.env") 
+	if err != nil {
 		t.Fatalf("error loading config: %s", err.Error())
 	}
 	
-	res, err := fetchDataFromVk("its_bmstu", 5, config.AppConfig.Vk.Token, config.AppConfig.Vk.ApiVer)
+	res, err := fetchDataFromVk("its_bmstu", 5, cfg.Vk.Token, cfg.Vk.ApiVer)
 	if err != nil {
 		t.Fatalf("error getting data from VK: %s", err.Error())
 	}

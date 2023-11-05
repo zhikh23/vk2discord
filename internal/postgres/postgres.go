@@ -15,14 +15,14 @@ type Db struct {
 
 var db Db
 
-func Instance() (*Db, error) {
+func Instance(cfg config.DbConfig) (*Db, error) {
 	dburl := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s",
-		config.AppConfig.Db.User,
-		config.AppConfig.Db.Password,
-		config.AppConfig.Db.Host,
-		config.AppConfig.Db.Port,
-		config.AppConfig.Db.Name,
+		cfg.User,
+		cfg.Password,
+		cfg.Host,
+		cfg.Port,
+		cfg.Name,
 	)
 	logrus.Infof("Using db url: %s", dburl)
 	pool, err := pgxpool.Connect(context.Background(), dburl)
