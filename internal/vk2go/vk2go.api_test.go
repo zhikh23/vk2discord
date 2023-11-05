@@ -12,7 +12,7 @@ func TestGetDataFromVk(t *testing.T) {
 		t.Fatalf("error loading config: %s", err.Error())
 	}
 	
-	res, err := fetchDataFromVk("its_bmstu", 5, config.AppConfig.VkToken, config.AppConfig.VkApiVer)
+	res, err := fetchDataFromVk("its_bmstu", 5, config.AppConfig.Vk.Token, config.AppConfig.Vk.ApiVer)
 	if err != nil {
 		t.Fatalf("error getting data from VK: %s", err.Error())
 	}

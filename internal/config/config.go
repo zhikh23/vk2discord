@@ -11,17 +11,20 @@ import (
 var AppConfig Config
 
 type Config struct {
-	VkToken string
-	VkApiVer float32
+	Vk      VkConfig
+	Db      DbConfig
+}
 
-	Db DbConfig
+type VkConfig struct {
+	Token  string
+	ApiVer float32
 }
 
 type DbConfig struct {
-	Host string
-	Port int
-	Name string
-	User string
+	Host 	 string
+	Port 	 int
+	Name 	 string
+	User 	 string
 	Password string
 }
 
@@ -72,8 +75,10 @@ func Init(fromFile string) error {
 	password := os.Getenv("DB_PASSWORD")
 
 	AppConfig = Config{
-		VkToken: vkToken,
-		VkApiVer: float32(vkApiVer),
+		Vk: VkConfig{
+			Token: vkToken,
+			ApiVer: float32(vkApiVer),
+		},
 		Db: DbConfig {
 			Host: host,
 			Port: port,
