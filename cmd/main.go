@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"vk2discord/internal/config"
 	"vk2discord/internal/discordbot"
-	"vk2discord/internal/postgres"
+	"vk2discord/internal/postgres/publications"
 	"vk2discord/internal/vk2go"
 )
 
@@ -14,18 +14,19 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	db, err := postgres.Instance(cfg.Db)
+	
+	pubStore, err := publications.NewStore(&cfg.Db)
 	if err != nil {
 		panic(err)
 	}
+
 	bot, err := discordbot.New(cfg.Discord)
 	if err != nil {
 		panic(err)
 	}
 
-
 	publications, err := vk2go.NewPublications(
-		db,
+		pubStore,
 		"its_bmstu",
 		cfg.Vk.Token,
 		cfg.Vk.ApiVer,

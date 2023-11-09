@@ -2,10 +2,12 @@ module vk2discord
 
 go 1.20
 
-require github.com/sirupsen/logrus v1.9.3
+require (
+	github.com/bwmarrin/discordgo v0.27.1
+	github.com/sirupsen/logrus v1.9.3
+)
 
 require (
-	github.com/bwmarrin/discordgo v0.27.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.0 // indirect

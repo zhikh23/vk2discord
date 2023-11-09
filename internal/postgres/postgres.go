@@ -13,9 +13,7 @@ type Db struct {
 	Pool *pgxpool.Pool
 }
 
-var db Db
-
-func Instance(cfg config.DbConfig) (*Db, error) {
+func Init(cfg *config.DbConfig) (*Db, error) {
 	dburl := fmt.Sprintf(
 		"postgres://%s:%s@%s:%d/%s",
 		cfg.User,
@@ -32,7 +30,7 @@ func Instance(cfg config.DbConfig) (*Db, error) {
 	}
 	logrus.Infof("Successfully connected to database")
 
-	db = Db{Pool: pool}
+	db := Db{Pool: pool}
 	return &db, err
 }
 
